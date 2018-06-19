@@ -1,4 +1,4 @@
-package gauravsngarg.com.myapplication.model;
+package gauravsngarg.com.bakingrecipes.model;
 
 /**
  * Created by GG on 19/06/18.
