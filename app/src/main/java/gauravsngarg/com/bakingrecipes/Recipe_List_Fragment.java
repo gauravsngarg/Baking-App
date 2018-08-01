@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +22,9 @@ public class Recipe_List_Fragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private RecyclerView recycler_view_recipes;
+    private ProgressBar pb_indicator;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -62,7 +66,10 @@ public class Recipe_List_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_master__recipe_, container, false);
+        recycler_view_recipes = (RecyclerView) view.findViewById(R.id.recycler_view_recipes);
+
+        return view;
         return inflater.inflate(R.layout.fragment_recipe__list_, container, false);
     }
 
