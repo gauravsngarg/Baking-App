@@ -8,16 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Master_Recipe_Fragment.OnFragmentInteractionListener} interface
+ * {@link Recipe_List_Fragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Master_Recipe_Fragment#newInstance} factory method to
+ * Use the {@link Recipe_List_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Master_Recipe_Fragment extends Fragment {
+public class Recipe_List_Fragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +28,7 @@ public class Master_Recipe_Fragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public Master_Recipe_Fragment() {
+    public Recipe_List_Fragment() {
         // Required empty public constructor
     }
 
@@ -39,11 +38,11 @@ public class Master_Recipe_Fragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Master_Recipe_Fragment.
+     * @return A new instance of fragment Recipe_List_Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Master_Recipe_Fragment newInstance(String param1, String param2) {
-        Master_Recipe_Fragment fragment = new Master_Recipe_Fragment();
+    public static Recipe_List_Fragment newInstance(String param1, String param2) {
+        Recipe_List_Fragment fragment = new Recipe_List_Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,7 +63,7 @@ public class Master_Recipe_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_master_recipe_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_recipe__list_, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
