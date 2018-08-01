@@ -1,5 +1,7 @@
 package gauravsngarg.com.bakingrecipes.model;
 
+import java.util.List;
+
 /**
  * Created by GG on 19/06/18.
  */
@@ -14,8 +16,8 @@ public class Recipe {
 
     int recipe_id;
     String recipeName;
-    RecipeIngredients mIngredients;
-    RecipeSteps mSteps;
+    List<RecipeIngredients> mIngredients;
+    List<RecipeSteps> mSteps;
     int servings;
     String image;
 
@@ -35,20 +37,20 @@ public class Recipe {
         this.recipeName = recipeName;
     }
 
-    public RecipeIngredients getIngredients() {
+    public List<RecipeIngredients> getIngredients() {
         return mIngredients;
     }
 
-    public void setIngredients(RecipeIngredients ingredients) {
-        mIngredients = ingredients;
+    public void setIngredients(List<RecipeIngredients> mIngredients) {
+        this.mIngredients = mIngredients;
     }
 
-    public RecipeSteps getSteps() {
+    public List<RecipeSteps> getSteps() {
         return mSteps;
     }
 
-    public void setSteps(RecipeSteps steps) {
-        mSteps = steps;
+    public void setSteps(List<RecipeSteps> mSteps) {
+        this.mSteps = mSteps;
     }
 
     public int getServings() {
