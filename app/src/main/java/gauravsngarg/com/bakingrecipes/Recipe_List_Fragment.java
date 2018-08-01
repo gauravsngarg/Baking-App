@@ -3,21 +3,26 @@ package gauravsngarg.com.bakingrecipes;
 import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Recipe_List_Fragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Recipe_List_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URL;
+
+import gauravsngarg.com.bakingrecipes.utils.NetworkUtils;
+
+
 public class Recipe_List_Fragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,6 +92,60 @@ public class Recipe_List_Fragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.d("Gaurav31", "onStart");
+
+        URL url = null;
+        url = NetworkUtils.buildURL();
+        new ShowRecipes().execute(url);
+    }
+
+    public class ShowRecipes extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pb_indicator.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(URL... params) {
+            URL searchURL = params[0];
+
+            String recipeList = null;
+
+            try{
+                recipeList = NetworkUtils.getResponseFromHttpUrl(searchURL);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+            return recipeList;
+        }
+
+        @Override
+        protected void onPostExecute(String json) {
+            if(json!=null){
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(json);
+                    JSONArray jsonArray = jsonObject.getJSONArray("ingredients");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }else{
+                pb_indicator.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
