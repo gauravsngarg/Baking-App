@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -19,7 +20,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import gauravsngarg.com.bakingrecipes.model.Recipe;
+import gauravsngarg.com.bakingrecipes.model.RecipeIngredients;
+import gauravsngarg.com.bakingrecipes.model.RecipeSteps;
 import gauravsngarg.com.bakingrecipes.utils.NetworkUtils;
 
 
@@ -38,19 +44,14 @@ public class Recipe_List_Fragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private List<Recipe> list;
+
+    public TextView tv_test;
+
     public Recipe_List_Fragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Recipe_List_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Recipe_List_Fragment newInstance(String param1, String param2) {
         Recipe_List_Fragment fragment = new Recipe_List_Fragment();
         Bundle args = new Bundle();
@@ -74,10 +75,13 @@ public class Recipe_List_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe__list_, container, false);
         recycler_view_recipes = (RecyclerView) view.findViewById(R.id.recycler_view_recipes);
+        pb_indicator = (ProgressBar) view.findViewById(R.id.pb_progress_recipes);
+        tv_test = (TextView) view.findViewById(R.id.tv_test);
+
+        list = new ArrayList<>();
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -132,15 +136,71 @@ public class Recipe_List_Fragment extends Fragment {
         @Override
         protected void onPostExecute(String json) {
             if(json!=null){
-                JSONObject jsonObject = null;
+                JSONArray jsonArray = null;
                 try {
-                    jsonObject = new JSONObject(json);
-                    JSONArray jsonArray = jsonObject.getJSONArray("ingredients");
+                    jsonArray = new JSONArray(json);
 
+                    for (int i =0 ; i< jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        Recipe newRecipe = new Recipe();
+                        newRecipe.setRecipe_id(Integer.parseInt(jsonObject.getString("id")));
+                        newRecipe.setRecipeName(jsonObject.getString("name"));
+
+                        JSONArray jsonIngredientsArray = jsonObject.getJSONArray("ingredients");
+
+                        List<RecipeIngredients> ingredients = new ArrayList<>();
+
+                        for(int p = 0; p < jsonIngredientsArray.length(); p++){
+
+                            JSONObject jsonIngredient = jsonIngredientsArray.getJSONObject(p);
+                            RecipeIngredients ingredientItem = new RecipeIngredients();
+
+                            ingredientItem.setQuantity(jsonIngredient.getInt("quantity"));
+                            ingredientItem.setMeasure(jsonIngredient.getString("measure"));
+                            ingredientItem.setIngredient(jsonIngredient.getString("ingredient"));
+
+                            ingredients.add(ingredientItem);
+                        }
+
+                        newRecipe.setIngredients(ingredients);
+
+                        JSONArray jsonStepsArray = jsonObject.getJSONArray("steps");
+
+                        List<RecipeSteps> steps = new ArrayList<>();
+
+                        for(int p = 0; p < jsonStepsArray.length(); p++){
+
+                            JSONObject jsonStep = jsonStepsArray.getJSONObject(p);
+                            RecipeSteps stepItem = new RecipeSteps();
+
+                            stepItem.setSteps_id(jsonStep.getInt("id"));
+                            stepItem.setShortDescription(jsonStep.getString("shortDescription"));
+                            stepItem.setDescription(jsonStep.getString("videoURL"));
+                            stepItem.setThumbnailURL(jsonStep.getString("thumbnailURL"));
+
+                            steps.add(stepItem);
+                        }
+
+                        newRecipe.setSteps(steps);
+
+                        newRecipe.setServings(jsonObject.getInt("servings"));
+                        newRecipe.setImage(jsonObject.getString("image"));
+
+                        //  Log.d("Gaurav31", "Json Done" );
+
+                        list.add(newRecipe);
+
+                        tv_test.setText( "Hello World");
+
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                    Log.d("Gaurav31", "Error");
                 }
+
+
+
 
 
             }else{
@@ -155,18 +215,7 @@ public class Recipe_List_Fragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
