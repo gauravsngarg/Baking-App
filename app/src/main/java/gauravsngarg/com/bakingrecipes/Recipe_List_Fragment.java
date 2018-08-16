@@ -5,14 +5,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import gauravsngarg.com.bakingrecipes.adapter.RecipeAdapter;
 import gauravsngarg.com.bakingrecipes.model.Recipe;
 import gauravsngarg.com.bakingrecipes.model.RecipeIngredients;
 import gauravsngarg.com.bakingrecipes.model.RecipeSteps;
@@ -30,8 +29,7 @@ import gauravsngarg.com.bakingrecipes.utils.NetworkUtils;
 
 
 public class Recipe_List_Fragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -46,7 +44,9 @@ public class Recipe_List_Fragment extends Fragment {
 
     private List<Recipe> list;
 
-    public TextView tv_test;
+
+    public RecipeAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     public Recipe_List_Fragment() {
         // Required empty public constructor
@@ -63,11 +63,14 @@ public class Recipe_List_Fragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        list = new ArrayList<>();
     }
 
     @Override
@@ -76,9 +79,11 @@ public class Recipe_List_Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recipe__list_, container, false);
         recycler_view_recipes = (RecyclerView) view.findViewById(R.id.recycler_view_recipes);
         pb_indicator = (ProgressBar) view.findViewById(R.id.pb_progress_recipes);
-        tv_test = (TextView) view.findViewById(R.id.tv_test);
 
-        list = new ArrayList<>();
+        layoutManager = new LinearLayoutManager(this.getActivity());
+        recycler_view_recipes.setLayoutManager(layoutManager);
+        recycler_view_recipes.setHasFixedSize(true);
+
         return view;
     }
 
@@ -103,8 +108,6 @@ public class Recipe_List_Fragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Log.d("Gaurav31", "onStart");
-
         URL url = null;
         url = NetworkUtils.buildURL();
         new ShowRecipes().execute(url);
@@ -124,9 +127,9 @@ public class Recipe_List_Fragment extends Fragment {
 
             String recipeList = null;
 
-            try{
+            try {
                 recipeList = NetworkUtils.getResponseFromHttpUrl(searchURL);
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -135,12 +138,13 @@ public class Recipe_List_Fragment extends Fragment {
 
         @Override
         protected void onPostExecute(String json) {
-            if(json!=null){
+            if (json != null) {
                 JSONArray jsonArray = null;
                 try {
+                    list.clear();
                     jsonArray = new JSONArray(json);
 
-                    for (int i =0 ; i< jsonArray.length(); i++){
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         Recipe newRecipe = new Recipe();
                         newRecipe.setRecipe_id(Integer.parseInt(jsonObject.getString("id")));
@@ -150,7 +154,7 @@ public class Recipe_List_Fragment extends Fragment {
 
                         List<RecipeIngredients> ingredients = new ArrayList<>();
 
-                        for(int p = 0; p < jsonIngredientsArray.length(); p++){
+                        for (int p = 0; p < jsonIngredientsArray.length(); p++) {
 
                             JSONObject jsonIngredient = jsonIngredientsArray.getJSONObject(p);
                             RecipeIngredients ingredientItem = new RecipeIngredients();
@@ -168,7 +172,7 @@ public class Recipe_List_Fragment extends Fragment {
 
                         List<RecipeSteps> steps = new ArrayList<>();
 
-                        for(int p = 0; p < jsonStepsArray.length(); p++){
+                        for (int p = 0; p < jsonStepsArray.length(); p++) {
 
                             JSONObject jsonStep = jsonStepsArray.getJSONObject(p);
                             RecipeSteps stepItem = new RecipeSteps();
@@ -186,24 +190,18 @@ public class Recipe_List_Fragment extends Fragment {
                         newRecipe.setServings(jsonObject.getInt("servings"));
                         newRecipe.setImage(jsonObject.getString("image"));
 
-                        //  Log.d("Gaurav31", "Json Done" );
-
                         list.add(newRecipe);
 
-                        tv_test.setText( "Hello World");
-
                     }
+
+                    adapter = new RecipeAdapter(getActivity(), list.size(), list);
+                    recycler_view_recipes.setAdapter(adapter);
+                    pb_indicator.setVisibility(View.INVISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                    Log.d("Gaurav31", "Error");
                 }
 
-
-
-
-
-            }else{
+            } else {
                 pb_indicator.setVisibility(View.INVISIBLE);
             }
         }
