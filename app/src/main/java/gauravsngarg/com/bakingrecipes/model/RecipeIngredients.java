@@ -5,9 +5,6 @@ package gauravsngarg.com.bakingrecipes.model;
  */
 
 public class RecipeIngredients {
-//    quantity: 2,
-//    measure: "CUP",
-//    ingredient: "Graham Cracker crumbs"
 
     int quantity;
     String measure;

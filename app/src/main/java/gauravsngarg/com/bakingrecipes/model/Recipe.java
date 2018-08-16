@@ -7,12 +7,6 @@ import java.util.List;
  */
 
 public class Recipe {
-//    id: 1,
-//    name: "Nutella Pie",
-//    ingredients: [],
-//    steps: [],
-//    servings: 8,
-//    image: ""
 
     int recipe_id;
     String recipeName;
