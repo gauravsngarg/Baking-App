@@ -17,15 +17,6 @@ public class MainActivity extends AppCompatActivity implements Recipe_List_Fragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-//       FragmentManager fragmentManager = getFragmentManager();
-//       Recipe_List_Fragment fragment = new Recipe_List_Fragment();
-//       FragmentTransaction fragmentTransaction =  fragmentManager.beginTransaction();
-//       fragmentTransaction.add(R.id.container,fragment );
-//       fragmentTransaction.commit(); // save the changes
-
-
     }
 
     @Override
@@ -36,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements Recipe_List_Fragm
     @Override
     public void onRecipeListItemClick(int clickedItemIndex) {
         Toast.makeText(this, "Item Clicked" + (clickedItemIndex+1),Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(this, RecipeDetails.class);
+        Intent i = new Intent(this, ItemListActivity.class);
+        i.putExtra("index", clickedItemIndex+ "");
         startActivity(i);
     }
 }
