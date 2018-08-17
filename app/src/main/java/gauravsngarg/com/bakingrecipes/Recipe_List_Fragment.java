@@ -42,7 +42,7 @@ public class Recipe_List_Fragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private List<Recipe> list;
+    public static List<Recipe> list;
 
 
     public RecipeAdapter adapter;
