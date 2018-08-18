@@ -3,7 +3,6 @@ package gauravsngarg.com.bakingrecipes;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 /**
@@ -18,8 +17,8 @@ public class ItemDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        //setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -27,7 +26,11 @@ public class ItemDetailActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
+            Bundle argBundle = new Bundle();
             ItemDetailFragment fragment = new ItemDetailFragment();
+            argBundle.putString("item_id",getIntent().getExtras().getString("item_id"));
+            argBundle.putString("step_id",getIntent().getExtras().getString("step_id"));
+            fragment.setArguments(argBundle);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, fragment)
                     .commit();
