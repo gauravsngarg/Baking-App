@@ -1,4 +1,4 @@
-<TextView android:id="@+id/item_detail"
+<TextView android:id="@+id/item_ingredients"
           style="?android:attr/textAppearanceLarge"
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
