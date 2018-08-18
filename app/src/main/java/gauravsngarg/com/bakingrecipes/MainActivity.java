@@ -9,7 +9,7 @@ import android.widget.Toast;
 import gauravsngarg.com.bakingrecipes.adapter.RecipeAdapter;
 
 public class MainActivity extends AppCompatActivity implements Recipe_List_Fragment.OnFragmentInteractionListener,
-        RecipeAdapter.RecipeListItemClickListener{
+        RecipeAdapter.RecipeListItemClickListener {
 
     // private boolean mTwoPane;
 
@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity implements Recipe_List_Fragm
 
     @Override
     public void onRecipeListItemClick(int clickedItemIndex) {
-        Toast.makeText(this, "Item Clicked" + (clickedItemIndex+1),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Item Clicked" + (clickedItemIndex + 1), Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, ItemListActivity.class);
-        i.putExtra("index", clickedItemIndex+ "");
+        i.putExtra("item_id", clickedItemIndex + "");
         startActivity(i);
     }
 }

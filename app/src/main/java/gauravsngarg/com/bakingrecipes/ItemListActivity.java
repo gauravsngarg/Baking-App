@@ -18,6 +18,7 @@ public class ItemListActivity extends AppCompatActivity implements RecipeDetails
 
     private List<String> list;
     private boolean mTwoPane;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +29,13 @@ public class ItemListActivity extends AppCompatActivity implements RecipeDetails
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        int index = getIntent().getExtras().getInt("index");
+        index = getIntent().getExtras().getInt("item_id");
 
 
         list = new ArrayList<>();
         List<Recipe> list2 = Recipe_List_Fragment.list;
         list.add("Recipe Ingredients");
-        for (RecipeSteps j : list2.get(0).getSteps()) {
+        for (RecipeSteps j : list2.get(index).getSteps()) {
             list.add(j.getShortDescription());
         }
 
@@ -53,13 +54,19 @@ public class ItemListActivity extends AppCompatActivity implements RecipeDetails
     @Override
     public void onIngredientsStepItemCLick(int clickedItemIndex) {
         if(mTwoPane){
+            Bundle arguments = new Bundle();
+            arguments.putString("step_id", clickedItemIndex +"");
+            arguments.putString("item_id", index +"");
             ItemDetailFragment fragment = new ItemDetailFragment();
+            fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit();
 
         }else {
             Intent intent = new Intent(this, ItemDetailActivity.class);
+            intent.putExtra("step_id", clickedItemIndex +"");
+            intent.putExtra("item_id", index +"");
             this.startActivity(intent);
         }
 
