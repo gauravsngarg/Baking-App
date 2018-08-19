@@ -2,6 +2,7 @@ package gauravsngarg.com.bakingrecipes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,13 +19,16 @@ public class ItemListActivity extends AppCompatActivity implements RecipeDetails
 
     private List<String> list;
     private boolean mTwoPane;
-    private int index;
+    private int index, step_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
+        if(savedInstanceState!=null){
+            index = savedInstanceState.getInt("item_id");
+        }else
         index = Integer.parseInt(getIntent().getExtras().getString("item_id"));
 
         ActionBar actionBar = getSupportActionBar();
@@ -66,10 +70,15 @@ public class ItemListActivity extends AppCompatActivity implements RecipeDetails
             Intent intent = new Intent(this, ItemDetailActivity.class);
             intent.putExtra("step_id", clickedItemIndex + "");
             intent.putExtra("item_id", index + "");
+            //step_id = clickedItemIndex;
             this.startActivity(intent);
         }
 
     }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putString("item_id", index+"");
+    }
 }
