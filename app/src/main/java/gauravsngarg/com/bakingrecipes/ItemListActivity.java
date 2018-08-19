@@ -2,10 +2,10 @@ package gauravsngarg.com.bakingrecipes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import gauravsngarg.com.bakingrecipes.adapter.RecipeDetailsAdapter;
 import gauravsngarg.com.bakingrecipes.model.Recipe;
 import gauravsngarg.com.bakingrecipes.model.RecipeSteps;
 
-public class ItemListActivity extends AppCompatActivity implements RecipeDetailsAdapter.IngredientsStepClickListener{
+public class ItemListActivity extends AppCompatActivity implements RecipeDetailsAdapter.IngredientsStepClickListener {
 
     private List<String> list;
     private boolean mTwoPane;
@@ -25,12 +25,11 @@ public class ItemListActivity extends AppCompatActivity implements RecipeDetails
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        index = Integer.parseInt(getIntent().getExtras().getString("item_id"));
 
-        index = getIntent().getExtras().getInt("item_id");
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(Recipe_List_Fragment.list.get(index).getRecipeName());
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         list = new ArrayList<>();
         List<Recipe> list2 = Recipe_List_Fragment.list;
@@ -53,20 +52,20 @@ public class ItemListActivity extends AppCompatActivity implements RecipeDetails
 
     @Override
     public void onIngredientsStepItemCLick(int clickedItemIndex) {
-        if(mTwoPane){
+        if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putString("step_id", clickedItemIndex +"");
-            arguments.putString("item_id", index +"");
+            arguments.putString("step_id", clickedItemIndex + "");
+            arguments.putString("item_id", index + "");
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit();
 
-        }else {
+        } else {
             Intent intent = new Intent(this, ItemDetailActivity.class);
-            intent.putExtra("step_id", clickedItemIndex +"");
-            intent.putExtra("item_id", index +"");
+            intent.putExtra("step_id", clickedItemIndex + "");
+            intent.putExtra("item_id", index + "");
             this.startActivity(intent);
         }
 
