@@ -1,10 +1,10 @@
 package gauravsngarg.com.bakingrecipes;
 
-import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +48,7 @@ public class ItemDetailFragment extends Fragment {
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
 
+
     public ItemDetailFragment() {
     }
 
@@ -55,15 +56,12 @@ public class ItemDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Activity activity = this.getActivity();
-        //CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-        /*if (appBarLayout != null) {
-            appBarLayout.setTitle("Title");
-        }*/
-
 
         index = Integer.parseInt(getArguments().getString("item_id"));
         step_index = Integer.parseInt(getArguments().getString("step_id"));
+
+        Log.d("Gaurav31", step_index + "= step");
+        Log.d("Gaurav31", index + "= index");
 
         ingredientsList = new ArrayList<>();
         stepsList = new ArrayList<>();
@@ -76,6 +74,8 @@ public class ItemDetailFragment extends Fragment {
         View rootView;
         StringBuilder outIngredient = new StringBuilder();
 
+
+
         if (step_index == 0) {
             rootView = inflater.inflate(R.layout.item_detail, container, false);
             ingredientsList.addAll(Recipe_List_Fragment.list.get(index).getIngredients());
@@ -86,35 +86,49 @@ public class ItemDetailFragment extends Fragment {
             ingredients = ((TextView) rootView.findViewById(R.id.item_ingredients));
             ingredients.setText(outIngredient);
         } else {
+            Log.d("Gaurav31", "detail_step");
             rootView = inflater.inflate(R.layout.item_detail_step, container, false);
             tv_description = (TextView) rootView.findViewById(R.id.tv_description);
-            tv_videor_url = (TextView) rootView.findViewById(R.id.video_urla);
-            tv_thumbnail = (TextView) rootView.findViewById(R.id.tv_thumbmnail);
+
+            //tv_videor_url = (TextView) rootView.findViewById(R.id.video_urla);
+            //tv_thumbnail = (TextView) rootView.findViewById(R.id.tv_thumbmnail);
 
             stepsList.addAll(Recipe_List_Fragment.list.get(index).getSteps());
             RecipeSteps step = stepsList.get(step_index - 1);
 
-            tv_description.setText(step.getDescription() + "");
-            tv_videor_url.setText(step.getVideoURL() + "");
-            tv_thumbnail.setText(step.getThumbnailURL() + "");
-            btn_openEXO = (Button) rootView.findViewById(R.id.btn_openexo);
+            // tv_description.setText(step.getDescription() + "");
+            //tv_videor_url.setText(step.getVideoURL() + "");
+            //tv_thumbnail.setText(step.getThumbnailURL() + "");
+            //btn_openEXO = (Button) rootView.findViewById(R.id.btn_openexo);
 
             mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
 
             mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                     (getResources(), R.drawable.question_mark));
 
-            initializePlayer(Uri.parse("https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffdc33_-intro-brownies/-intro-brownies.mp4"));
+            if (step.getDescription() != null) {
+                tv_description.setText(step.getDescription());
+                tv_description.setVisibility(View.VISIBLE);
+            } else
+                tv_description.setVisibility(View.GONE);
 
+            mPlayerView.setVisibility(View.VISIBLE);
 
-            btn_openEXO.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Intent i = new Intent(getActivity(), ExoPlayer.class);
-                    //startActivity(i);
+            Uri uri = null;
+            if (step.getVideoURL() != null || step.getThumbnailURL() != null) {
+                if (step.getVideoURL() != null) {
+                    uri = Uri.parse(step.getVideoURL());
+                } else if (step.getThumbnailURL() != null) {
+                    uri = Uri.parse(step.getThumbnailURL());
                 }
-            });
+                initializePlayer(uri);
+            } else {
+                container.setVisibility(View.INVISIBLE);
+
+            }
+
         }
+
 
         return rootView;
     }
@@ -149,10 +163,5 @@ public class ItemDetailFragment extends Fragment {
         releasePlayer();
     }
 
-   /* @Override
-    public void onDetach() {
-        super.onDetach();
-        releasePlayer();
-    }*/
 
 }

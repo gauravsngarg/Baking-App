@@ -179,8 +179,9 @@ public class Recipe_List_Fragment extends Fragment {
 
                             stepItem.setSteps_id(jsonStep.getInt("id"));
                             stepItem.setShortDescription(jsonStep.getString("shortDescription"));
-                            stepItem.setDescription(jsonStep.getString("videoURL"));
+                            stepItem.setDescription(jsonStep.getString("description"));
                             stepItem.setThumbnailURL(jsonStep.getString("thumbnailURL"));
+                            stepItem.setVideoURL(jsonStep.getString("videoURL"));
 
                             steps.add(stepItem);
                         }
