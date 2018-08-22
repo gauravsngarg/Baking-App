@@ -75,7 +75,6 @@ public class ItemDetailFragment extends Fragment {
         StringBuilder outIngredient = new StringBuilder();
 
 
-
         if (step_index == 0) {
             rootView = inflater.inflate(R.layout.item_detail, container, false);
             ingredientsList.addAll(Recipe_List_Fragment.list.get(index).getIngredients());
@@ -106,25 +105,19 @@ public class ItemDetailFragment extends Fragment {
             mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource
                     (getResources(), R.drawable.question_mark));
 
+
             if (step.getDescription() != null) {
                 tv_description.setText(step.getDescription());
                 tv_description.setVisibility(View.VISIBLE);
             } else
                 tv_description.setVisibility(View.GONE);
 
-            mPlayerView.setVisibility(View.VISIBLE);
+           // mPlayerView.setVisibility(View.VISIBLE);
 
             Uri uri = null;
-            if (step.getVideoURL() != null || step.getThumbnailURL() != null) {
-                if (step.getVideoURL() != null) {
-                    uri = Uri.parse(step.getVideoURL());
-                } else if (step.getThumbnailURL() != null) {
-                    uri = Uri.parse(step.getThumbnailURL());
-                }
-                initializePlayer(uri);
-            } else {
-                container.setVisibility(View.INVISIBLE);
-
+            if (step.getVideoURL() != null) {
+                uri = Uri.parse(step.getVideoURL());
+                initializePlayer(uri, savedInstanceState);
             }
 
         }
@@ -133,7 +126,7 @@ public class ItemDetailFragment extends Fragment {
         return rootView;
     }
 
-    private void initializePlayer(Uri mediaUri) {
+    private void initializePlayer(Uri mediaUri, Bundle bundle) {
         if (mExoPlayer == null) {
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -145,8 +138,19 @@ public class ItemDetailFragment extends Fragment {
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
+            mExoPlayer.setPlayWhenReady(bundle.getBoolean("player_pos"));
+            mExoPlayer.seekTo(bundle.getLong("player_state"));
             mExoPlayer.setPlayWhenReady(true);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        long playerPos = mPlayerView.getPlayer().getCurrentPosition();
+        boolean playerState = mExoPlayer.getPlayWhenReady();
+        outState.putLong("player_pos", playerPos);
+        outState.putBoolean("player_state", playerState);
     }
 
     private void releasePlayer() {
