@@ -47,6 +47,8 @@ public class ItemDetailFragment extends Fragment {
     private Button btn_openEXO;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
+    private Uri uri_current;
+    private Bundle bundle;
 
 
     public ItemDetailFragment() {
@@ -114,16 +116,32 @@ public class ItemDetailFragment extends Fragment {
 
            // mPlayerView.setVisibility(View.VISIBLE);
 
-            Uri uri = null;
             if (step.getVideoURL() != null) {
-                uri = Uri.parse(step.getVideoURL());
-                initializePlayer(uri, savedInstanceState);
+                uri_current = Uri.parse(step.getVideoURL());
+                //initializePlayer(uri, savedInstanceState);
             }
+            if(savedInstanceState!=  null)
+                bundle = savedInstanceState;
 
         }
 
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(Util.SDK_INT > 23 && uri_current!= null){
+            initializePlayer(uri_current, bundle);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(uri_current!= null && (Util.SDK_INT <= 23 || mPlayerView == null ))
+        initializePlayer(uri_current, bundle);
     }
 
     private void initializePlayer(Uri mediaUri, Bundle bundle) {
