@@ -4,7 +4,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +52,6 @@ public class ItemDetailFragment extends Fragment {
     private Bundle bundle;
 
 
-
     public ItemDetailFragment() {
     }
 
@@ -65,12 +63,16 @@ public class ItemDetailFragment extends Fragment {
         index = Integer.parseInt(getArguments().getString("item_id"));
         step_index = Integer.parseInt(getArguments().getString("step_id"));
 
-//        Log.d("Gaurav31", step_index + "= step");
-//        Log.d("Gaurav31", index + "= index");
-
         ingredientsList = new ArrayList<>();
         stepsList = new ArrayList<>();
         bundle = new Bundle();
+        if (savedInstanceState != null) {
+            bundle = savedInstanceState;
+        } else {
+            bundle.putBoolean("player_state", false);
+            bundle.putLong("player_pos", 0);
+        }
+
     }
 
 
@@ -90,32 +92,23 @@ public class ItemDetailFragment extends Fragment {
             ingredients = ((TextView) rootView.findViewById(R.id.item_ingredients));
             ingredients.setText(outIngredient);
         } else {
-            Log.d("Gaurav31", "detail_step");
             rootView = inflater.inflate(R.layout.item_detail_step, container, false);
             tv_description = (TextView) rootView.findViewById(R.id.tv_description);
-
-            //tv_videor_url = (TextView) rootView.findViewById(R.id.video_urla);
             iv_thumbnail = (ImageView) rootView.findViewById(R.id.iv_thumbnail);
 
             stepsList.addAll(Recipe_List_Fragment.list.get(index).getSteps());
             RecipeSteps step = stepsList.get(step_index - 1);
 
             String description = step.getDescription();
-            if(description!=null)
-             tv_description.setText(step.getDescription() + "");
 
             String path_thumbnail = step.getThumbnailURL();
-            if(path_thumbnail!=null){
+            if (path_thumbnail != null) {
                 Uri uri_thumbnail = Uri.parse(path_thumbnail).buildUpon().build();
 
                 iv_thumbnail.setVisibility(View.VISIBLE);
                 Picasso.with(getActivity()).load(uri_thumbnail).into(iv_thumbnail);
-            }
-            else
+            } else
                 iv_thumbnail.setVisibility(View.INVISIBLE);
-
-            //tv_thumbnail.setText(step.getThumbnailURL() + "");
-            //btn_openEXO = (Button) rootView.findViewById(R.id.btn_openexo);
 
             mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
 
@@ -129,20 +122,10 @@ public class ItemDetailFragment extends Fragment {
             } else
                 tv_description.setVisibility(View.GONE);
 
-            // mPlayerView.setVisibility(View.VISIBLE);
-
             if (step.getVideoURL() != null) {
                 uri_current = Uri.parse(step.getVideoURL());
-                //initializePlayer(uri, savedInstanceState);
-            }
-            if (savedInstanceState != null)
-                bundle = savedInstanceState;
-            else {
-                bundle.putBoolean("player_state", false);
-                bundle.putLong("player_pos", 0);
             }
         }
-
 
         return rootView;
     }
@@ -176,8 +159,6 @@ public class ItemDetailFragment extends Fragment {
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.seekTo(bundle.getLong("player_pos"));
             mExoPlayer.setPlayWhenReady(bundle.getBoolean("player_pos"));
-
-
         }
     }
 
