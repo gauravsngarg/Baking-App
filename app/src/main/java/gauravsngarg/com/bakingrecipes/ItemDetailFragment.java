@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -23,6 +24,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +44,14 @@ public class ItemDetailFragment extends Fragment {
     private int step_index;
     private TextView tv_description;
     private TextView tv_videor_url;
-    private TextView tv_thumbnail;
+    private ImageView iv_thumbnail;
     TextView ingredients;
     private Button btn_openEXO;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
     private Uri uri_current;
     private Bundle bundle;
+
 
 
     public ItemDetailFragment() {
@@ -92,13 +95,25 @@ public class ItemDetailFragment extends Fragment {
             tv_description = (TextView) rootView.findViewById(R.id.tv_description);
 
             //tv_videor_url = (TextView) rootView.findViewById(R.id.video_urla);
-            //tv_thumbnail = (TextView) rootView.findViewById(R.id.tv_thumbmnail);
+            iv_thumbnail = (ImageView) rootView.findViewById(R.id.iv_thumbnail);
 
             stepsList.addAll(Recipe_List_Fragment.list.get(index).getSteps());
             RecipeSteps step = stepsList.get(step_index - 1);
 
-            // tv_description.setText(step.getDescription() + "");
-            //tv_videor_url.setText(step.getVideoURL() + "");
+            String description = step.getDescription();
+            if(description!=null)
+             tv_description.setText(step.getDescription() + "");
+
+            String path_thumbnail = step.getThumbnailURL();
+            if(path_thumbnail!=null){
+                Uri uri_thumbnail = Uri.parse(path_thumbnail).buildUpon().build();
+
+                iv_thumbnail.setVisibility(View.VISIBLE);
+                Picasso.with(getActivity()).load(uri_thumbnail).into(iv_thumbnail);
+            }
+            else
+                iv_thumbnail.setVisibility(View.INVISIBLE);
+
             //tv_thumbnail.setText(step.getThumbnailURL() + "");
             //btn_openEXO = (Button) rootView.findViewById(R.id.btn_openexo);
 
@@ -135,7 +150,7 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (Util.SDK_INT > 23 && uri_current != null) {
+        if (step_index > 0 && Util.SDK_INT > 23 && uri_current != null) {
             initializePlayer(uri_current, bundle);
         }
     }
@@ -143,7 +158,7 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (uri_current != null && (Util.SDK_INT <= 23 || mPlayerView == null))
+        if (step_index > 0 && uri_current != null && (Util.SDK_INT <= 23 || mPlayerView == null))
             initializePlayer(uri_current, bundle);
     }
 
@@ -161,6 +176,8 @@ public class ItemDetailFragment extends Fragment {
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.seekTo(bundle.getLong("player_pos"));
             mExoPlayer.setPlayWhenReady(bundle.getBoolean("player_pos"));
+
+
         }
     }
 
