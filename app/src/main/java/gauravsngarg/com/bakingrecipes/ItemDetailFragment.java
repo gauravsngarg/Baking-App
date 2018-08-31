@@ -62,11 +62,12 @@ public class ItemDetailFragment extends Fragment {
         index = Integer.parseInt(getArguments().getString("item_id"));
         step_index = Integer.parseInt(getArguments().getString("step_id"));
 
-        Log.d("Gaurav31", step_index + "= step");
-        Log.d("Gaurav31", index + "= index");
+//        Log.d("Gaurav31", step_index + "= step");
+//        Log.d("Gaurav31", index + "= index");
 
         ingredientsList = new ArrayList<>();
         stepsList = new ArrayList<>();
+        bundle = new Bundle();
     }
 
 
@@ -75,7 +76,6 @@ public class ItemDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView;
         StringBuilder outIngredient = new StringBuilder();
-
 
         if (step_index == 0) {
             rootView = inflater.inflate(R.layout.item_detail, container, false);
@@ -114,15 +114,18 @@ public class ItemDetailFragment extends Fragment {
             } else
                 tv_description.setVisibility(View.GONE);
 
-           // mPlayerView.setVisibility(View.VISIBLE);
+            // mPlayerView.setVisibility(View.VISIBLE);
 
             if (step.getVideoURL() != null) {
                 uri_current = Uri.parse(step.getVideoURL());
                 //initializePlayer(uri, savedInstanceState);
             }
-            if(savedInstanceState!=  null)
+            if (savedInstanceState != null)
                 bundle = savedInstanceState;
-
+            else {
+                bundle.putBoolean("player_state", false);
+                bundle.putLong("player_pos", 0);
+            }
         }
 
 
@@ -132,7 +135,7 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(Util.SDK_INT > 23 && uri_current!= null){
+        if (Util.SDK_INT > 23 && uri_current != null) {
             initializePlayer(uri_current, bundle);
         }
     }
@@ -140,8 +143,8 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(uri_current!= null && (Util.SDK_INT <= 23 || mPlayerView == null ))
-        initializePlayer(uri_current, bundle);
+        if (uri_current != null && (Util.SDK_INT <= 23 || mPlayerView == null))
+            initializePlayer(uri_current, bundle);
     }
 
     private void initializePlayer(Uri mediaUri, Bundle bundle) {
@@ -156,9 +159,8 @@ public class ItemDetailFragment extends Fragment {
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
+            mExoPlayer.seekTo(bundle.getLong("player_pos"));
             mExoPlayer.setPlayWhenReady(bundle.getBoolean("player_pos"));
-            mExoPlayer.seekTo(bundle.getLong("player_state"));
-            mExoPlayer.setPlayWhenReady(true);
         }
     }
 
