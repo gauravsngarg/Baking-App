@@ -1,15 +1,31 @@
 package gauravsngarg.com.bakingrecipes.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by GG on 19/06/18.
  */
 
-public class RecipeSteps {
+public class RecipeSteps{
 
+    @SerializedName("id")
+    @Expose
     int steps_id;
+    @SerializedName("shortDescription")
+    @Expose
     String shortDescription;
+    @SerializedName("description")
+    @Expose
     String description;
+    @SerializedName("videoURL")
+    @Expose
     String videoURL;
+    @SerializedName("thumbnailURL")
+    @Expose
     String thumbnailURL;
 
     public int getSteps_id() {
@@ -51,4 +67,40 @@ public class RecipeSteps {
     public void setThumbnailURL(String thumbnailURL) {
         this.thumbnailURL = thumbnailURL;
     }
+
+   /* @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.steps_id);
+        dest.writeString(this.shortDescription);
+        dest.writeString(this.description);
+        dest.writeString(this.videoURL);
+        dest.writeString(this.thumbnailURL);
+
+    }
+    protected RecipeSteps(Parcel in) {
+        this.steps_id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.shortDescription = in.readString();
+        this.description = in.readString();
+        this.videoURL = in.readString();
+        this.thumbnailURL = in.readString();
+    }
+
+    public static final Parcelable.Creator<RecipeSteps> CREATOR = new Parcelable.Creator<RecipeSteps>() {
+        @Override
+        public RecipeSteps createFromParcel(Parcel source) {
+            return new RecipeSteps(source);
+        }
+
+        @Override
+        public RecipeSteps[] newArray(int size) {
+            return new RecipeSteps[size];
+        }
+    };
+*/
+
 }

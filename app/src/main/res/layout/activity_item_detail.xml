@@ -5,35 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="gauravsngarg.com.bakingrecipes.ItemDetailActivity"
+    tools:context="gauravsngarg.com.bakingrecipes.activities.ItemDetailActivity"
     tools:ignore="MergeRootFrame">
-
-    <!--<android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        &lt;!&ndash;<android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/detail_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
-        </android.support.design.widget.CollapsingToolbarLayout>&ndash;&gt;
-
-    </android.support.design.widget.AppBarLayout>-->
 
     <FrameLayout
         android:id="@+id/item_detail_container"

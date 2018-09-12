@@ -7,10 +7,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,8 +27,6 @@ import java.util.List;
 
 import gauravsngarg.com.bakingrecipes.adapter.RecipeAdapter;
 import gauravsngarg.com.bakingrecipes.model.Recipe;
-import gauravsngarg.com.bakingrecipes.model.RecipeIngredients;
-import gauravsngarg.com.bakingrecipes.model.RecipeSteps;
 import gauravsngarg.com.bakingrecipes.utils.NetworkUtils;
 
 
@@ -139,74 +141,100 @@ public class Recipe_List_Fragment extends Fragment {
         @Override
         protected void onPostExecute(String json) {
             if (json != null) {
-                JSONArray jsonArray = null;
+                Gson gson;
+                list.clear();
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gson = gsonBuilder.create();
                 try {
-                    list.clear();
-                    jsonArray = new JSONArray(json);
+                    JSONArray jsonArray = new JSONArray(json);
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Recipe newRecipe = new Recipe();
-                        newRecipe.setRecipe_id(Integer.parseInt(jsonObject.getString("id")));
-                        newRecipe.setRecipeName(jsonObject.getString("name"));
-
-                        JSONArray jsonIngredientsArray = jsonObject.getJSONArray("ingredients");
-
-                        List<RecipeIngredients> ingredients = new ArrayList<>();
-
-                        for (int p = 0; p < jsonIngredientsArray.length(); p++) {
-
-                            JSONObject jsonIngredient = jsonIngredientsArray.getJSONObject(p);
-                            RecipeIngredients ingredientItem = new RecipeIngredients();
-
-                            ingredientItem.setQuantity(jsonIngredient.getInt("quantity"));
-                            ingredientItem.setMeasure(jsonIngredient.getString("measure"));
-                            ingredientItem.setIngredient(jsonIngredient.getString("ingredient"));
-
-                            ingredients.add(ingredientItem);
-                        }
-
-                        newRecipe.setIngredients(ingredients);
-
-                        JSONArray jsonStepsArray = jsonObject.getJSONArray("steps");
-
-                        List<RecipeSteps> steps = new ArrayList<>();
-
-                        for (int p = 0; p < jsonStepsArray.length(); p++) {
-
-                            JSONObject jsonStep = jsonStepsArray.getJSONObject(p);
-                            RecipeSteps stepItem = new RecipeSteps();
-
-                            stepItem.setSteps_id(jsonStep.getInt("id"));
-                            stepItem.setShortDescription(jsonStep.getString("shortDescription"));
-                            stepItem.setDescription(jsonStep.getString("description"));
-                            stepItem.setThumbnailURL(jsonStep.getString("thumbnailURL"));
-                            stepItem.setVideoURL(jsonStep.getString("videoURL"));
-
-                            steps.add(stepItem);
-                        }
-
-                        newRecipe.setSteps(steps);
-
-                        newRecipe.setServings(jsonObject.getInt("servings"));
-                        newRecipe.setImage(jsonObject.getString("image"));
-
-                        list.add(newRecipe);
-
+                        Recipe recipe = gson.fromJson(jsonObject.toString(), Recipe.class);
+                        list.add(recipe);
                     }
 
                     adapter = new RecipeAdapter(getActivity(), list.size(), list);
                     recycler_view_recipes.setAdapter(adapter);
-                    pb_indicator.setVisibility(View.INVISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-            } else {
-                pb_indicator.setVisibility(View.INVISIBLE);
+
             }
+            Utils.saveObjectInPreference(getContext(), "Recipe", list);
+
+           // Log.d("Gaurav31", list.get(3).getRecipeName() + " Listfrag");
+            pb_indicator.setVisibility(View.INVISIBLE);
+
         }
     }
+
+
+    /*private void postExecuteMethod(String json){
+        JSONArray jsonArray = null;
+        try {
+            list.clear();
+            jsonArray = new JSONArray(json);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Recipe newRecipe = Utils.getFromPreference(getActivity(), Recipe.class);
+                newRecipe.setRecipe_id(Integer.parseInt(jsonObject.getString("id")));
+                newRecipe.setRecipeName(jsonObject.getString("name"));
+
+                JSONArray jsonIngredientsArray = jsonObject.getJSONArray("ingredients");
+
+                List<RecipeIngredients> ingredients = new ArrayList<>();
+
+                for (int p = 0; p < jsonIngredientsArray.length(); p++) {
+
+                    JSONObject jsonIngredient = jsonIngredientsArray.getJSONObject(p);
+                    RecipeIngredients ingredientItem = new RecipeIngredients();
+
+                    ingredientItem.setQuantity(jsonIngredient.getInt("quantity"));
+                    ingredientItem.setMeasure(jsonIngredient.getString("measure"));
+                    ingredientItem.setIngredient(jsonIngredient.getString("ingredient"));
+
+                    ingredients.add(ingredientItem);
+                }
+
+                newRecipe.setIngredients(ingredients);
+
+                JSONArray jsonStepsArray = jsonObject.getJSONArray("steps");
+
+                List<RecipeSteps> steps = new ArrayList<>();
+
+                for (int p = 0; p < jsonStepsArray.length(); p++) {
+
+                    JSONObject jsonStep = jsonStepsArray.getJSONObject(p);
+                    RecipeSteps stepItem = new RecipeSteps();
+
+                    stepItem.setSteps_id(jsonStep.getInt("id"));
+                    stepItem.setShortDescription(jsonStep.getString("shortDescription"));
+                    stepItem.setDescription(jsonStep.getString("description"));
+                    stepItem.setThumbnailURL(jsonStep.getString("thumbnailURL"));
+                    stepItem.setVideoURL(jsonStep.getString("videoURL"));
+
+                    steps.add(stepItem);
+                }
+
+                newRecipe.setSteps(steps);
+
+                newRecipe.setServings(jsonObject.getInt("servings"));
+                newRecipe.setImage(jsonObject.getString("image"));
+
+                list.add(newRecipe);
+
+            }
+
+            adapter = new RecipeAdapter(getActivity(), list.size(), list);
+            recycler_view_recipes.setAdapter(adapter);
+            pb_indicator.setVisibility(View.INVISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }*/
 
     @Override
     public void onDetach() {

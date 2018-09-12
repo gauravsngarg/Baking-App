@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="gauravsngarg.com.bakingrecipes"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="gauravsngarg.com.bakingrecipes">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,28 +11,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".activities.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:launchMode="singleTop"
-            android:name=".ItemListActivity"
+            android:name=".activities.ItemListActivity"
             android:label="@string/title_item_list"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity
             android:launchMode="singleTop"
-            android:name=".ItemDetailActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".activities.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".ItemListActivity"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.ItemListActivity"
+            android:theme="@style/AppTheme"></activity>
+
+        <receiver android:name=".RecipeWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
