@@ -1,4 +1,4 @@
-package gauravsngarg.com.bakingrecipes;
+package gauravsngarg.com.bakingrecipes.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import gauravsngarg.com.bakingrecipes.R;
+import gauravsngarg.com.bakingrecipes.Recipe_List_Fragment;
 import gauravsngarg.com.bakingrecipes.adapter.RecipeAdapter;
 
 public class MainActivity extends AppCompatActivity implements Recipe_List_Fragment.OnFragmentInteractionListener,

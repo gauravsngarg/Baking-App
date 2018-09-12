@@ -4,6 +4,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import gauravsngarg.com.bakingrecipes.R;
+import gauravsngarg.com.bakingrecipes.RecipeWidget;
+import gauravsngarg.com.bakingrecipes.Recipe_List_Fragment;
+import gauravsngarg.com.bakingrecipes.adapter.RecipeIngredientsAdapter;
 import gauravsngarg.com.bakingrecipes.dummy.DummyContent;
 import gauravsngarg.com.bakingrecipes.model.RecipeIngredients;
 import gauravsngarg.com.bakingrecipes.model.RecipeSteps;
@@ -50,6 +56,7 @@ public class ItemDetailFragment extends Fragment {
     private SimpleExoPlayerView mPlayerView;
     private Uri uri_current;
     private Bundle bundle;
+    private RecyclerView rv_ingredients;
 
 
     public ItemDetailFragment() {
@@ -83,14 +90,29 @@ public class ItemDetailFragment extends Fragment {
         StringBuilder outIngredient = new StringBuilder();
 
         if (step_index == 0) {
-            rootView = inflater.inflate(R.layout.item_detail, container, false);
+            rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
+
             ingredientsList.addAll(Recipe_List_Fragment.list.get(index).getIngredients());
-            for (int i = 0; i < ingredientsList.size(); i++) {
+            rv_ingredients = (RecyclerView) rootView.findViewById(R.id.ingredients_recycler_view);
+            if(ingredientsList != null){
+                rv_ingredients.setHasFixedSize(true);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                rv_ingredients.setLayoutManager(linearLayoutManager);
+                RecipeIngredientsAdapter recipeIngredientsAdapter;
+
+                recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(),ingredientsList.size(), ingredientsList);
+                rv_ingredients.setAdapter(recipeIngredientsAdapter);
+
+                RecipeWidget.sendRefreshBroadcast(getActivity());
+
+            }
+            /*for (int i = 0; i < ingredientsList.size(); i++) {
                 outIngredient.append(ingredientsList.get(i).getQuantity() + " " + ingredientsList.get(i).getMeasure().toString() + " - " +
                         ingredientsList.get(i).getIngredient().toString() + "\n");
             }
             ingredients = ((TextView) rootView.findViewById(R.id.item_ingredients));
-            ingredients.setText(outIngredient);
+            RecipeWidget.sendRefreshBroadcast(getActivity());
+            ingredients.setText(outIngredient);*/
         } else {
             rootView = inflater.inflate(R.layout.item_detail_step, container, false);
             tv_description = (TextView) rootView.findViewById(R.id.tv_description);
