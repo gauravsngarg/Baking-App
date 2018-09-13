@@ -33,15 +33,6 @@
             android:parentActivityName=".activities.ItemListActivity"
             android:theme="@style/AppTheme"></activity>
 
-        <receiver android:name=".RecipeWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/recipe_widget_info" />
-        </receiver>
     </application>
 
 </manifest>

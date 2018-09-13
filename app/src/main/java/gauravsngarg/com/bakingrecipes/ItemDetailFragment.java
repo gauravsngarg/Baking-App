@@ -30,9 +30,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import gauravsngarg.com.bakingrecipes.R;
-import gauravsngarg.com.bakingrecipes.RecipeWidget;
-import gauravsngarg.com.bakingrecipes.Recipe_List_Fragment;
 import gauravsngarg.com.bakingrecipes.adapter.RecipeIngredientsAdapter;
 import gauravsngarg.com.bakingrecipes.dummy.DummyContent;
 import gauravsngarg.com.bakingrecipes.model.RecipeIngredients;
@@ -103,7 +100,7 @@ public class ItemDetailFragment extends Fragment {
                 recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(),ingredientsList.size(), ingredientsList);
                 rv_ingredients.setAdapter(recipeIngredientsAdapter);
 
-                RecipeWidget.sendRefreshBroadcast(getActivity());
+                //RecipeWidget.sendRefreshBroadcast(getActivity());
 
             }
             /*for (int i = 0; i < ingredientsList.size(); i++) {
