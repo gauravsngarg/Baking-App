@@ -34,6 +34,7 @@ import gauravsngarg.com.bakingrecipes.adapter.RecipeIngredientsAdapter;
 import gauravsngarg.com.bakingrecipes.dummy.DummyContent;
 import gauravsngarg.com.bakingrecipes.model.RecipeIngredients;
 import gauravsngarg.com.bakingrecipes.model.RecipeSteps;
+import gauravsngarg.com.bakingrecipes.widget.RecipeAppWidgetProvider;
 
 public class ItemDetailFragment extends Fragment {
 
@@ -47,7 +48,7 @@ public class ItemDetailFragment extends Fragment {
     private TextView tv_description;
     private TextView tv_videor_url;
     private ImageView iv_thumbnail;
-    TextView ingredients;
+    private TextView ingredients;
     private Button btn_openEXO;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
@@ -100,7 +101,7 @@ public class ItemDetailFragment extends Fragment {
                 recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(),ingredientsList.size(), ingredientsList);
                 rv_ingredients.setAdapter(recipeIngredientsAdapter);
 
-                //RecipeWidget.sendRefreshBroadcast(getActivity());
+                RecipeAppWidgetProvider.sendRefreshBroadcast(getActivity());
 
             }
             /*for (int i = 0; i < ingredientsList.size(); i++) {
