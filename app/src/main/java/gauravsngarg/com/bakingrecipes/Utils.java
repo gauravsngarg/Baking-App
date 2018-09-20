@@ -13,6 +13,8 @@ public class Utils {
 
     public static String JSON = null;
 
+    public static int  Recipe_Index = 0;
+
     public static String getJSON() {
         return JSON;
     }
@@ -28,6 +30,14 @@ public class Utils {
         String json = gson.toJson(value);
         prefsEditor.putString(key, json);
         prefsEditor.commit();
+    }
+
+    public static int getRecipe_Index() {
+        return Recipe_Index;
+    }
+
+    public static void setRecipe_Index(int recipe_Index) {
+        Recipe_Index = recipe_Index;
     }
 
     public static String getFromPreference(Context context, String key){

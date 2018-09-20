@@ -17,6 +17,7 @@ import gauravsngarg.com.bakingrecipes.activities.MainActivity;
 public class RecipeAppWidgetProvider extends AppWidgetProvider {
 
     public static final String EXTRA_LABEL = "TASK_TEXT";
+    private static int clickedItemIndex = 0;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -28,6 +29,7 @@ public class RecipeAppWidgetProvider extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.widgetTitleLabel, titlePendingIntent);
 
         Intent intent = new Intent(context, MyWidgetRemoteViewsService.class);
+       // intent.putExtra("index_id", clickedItemIndex + "");
         views.setRemoteAdapter(R.id.widgetListView,  intent);
 
 

@@ -8,10 +8,18 @@ import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import gauravsngarg.com.bakingrecipes.R;
+import gauravsngarg.com.bakingrecipes.Utils;
 import gauravsngarg.com.bakingrecipes.model.Recipe;
 import gauravsngarg.com.bakingrecipes.model.RecipeIngredients;
 
@@ -23,60 +31,42 @@ public class MyWidgetRemoteViewsFactory implements RemoteViewsService.RemoteView
 
     private Context mContext;
     private Recipe mRecipe;
+    private int recipe_Index;
 
     private List<RecipeIngredients> list;
 
 
     public MyWidgetRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
+       // recipe_Index = Integer.parseInt(intent.getExtras().getString("index_id"));
     }
 
     @Override
     public void onCreate() {
         Log.d("Gaurav31", "onCreate");
-        /*String json = Utils.getJSON();
+        Gson gson = new Gson();
+        String json = Utils.getFromPreference(mContext, "Recipe");
 
-        if(json!= null){
-            Gson gson = new Gson();
+       // Utils.setRecipe_Index(recipe_Index);
+        recipe_Index = Utils.getRecipe_Index();
+        if (json != null) {
             list = new ArrayList<>();
+
             GsonBuilder gsonBuilder = new GsonBuilder();
             gson = gsonBuilder.create();
+            try {
+                JSONArray jsonArray = new JSONArray(json);
 
-
-
-        }
-        try {
-            JSONArray jsonArray = new JSONArray(json);
-
-            for (int i = 0; i < jsonArray.length(); i++) {
+                int i = recipe_Index;
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 Recipe recipe = gson.fromJson(jsonObject.toString(), Recipe.class);
-                list.add(recipe.getIngredients().get(0));
-            }*/
+                list = recipe.getIngredients();
+                mRecipe = recipe;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-
-        Recipe tempRecip = new Recipe();
-        tempRecip.setRecipeName("Nuts");
-        list = new ArrayList<>();
-        RecipeIngredients ing = new RecipeIngredients();
-        ing.setIngredient("Hello");
-        ing.setMeasure("4");
-        ing.setQuantity(23.4);
-
-        list.add(ing);
-        list.add(ing);
-        list.add(ing);
-        tempRecip.setIngredients(list);
-        mRecipe = tempRecip;
-        list = mRecipe.getIngredients();
-
-/*
-        mRecipe = tempRecip;
-            //list = mRecipe.getIngredients();
-            Log.d("Gaurav31", "onCreate");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
+        }
     }
 
         @Override
@@ -113,18 +103,17 @@ public class MyWidgetRemoteViewsFactory implements RemoteViewsService.RemoteView
     @Override
     public RemoteViews getViewAt(int position) {
 
-        Log.d("Gaurav31", "getViewAt");
-        if (position == AdapterView.INVALID_POSITION || list == null)
-        {
-            Log.d("Gaurav31", "getViewAtNull");
+        if (position == AdapterView.INVALID_POSITION || list == null) {
             return null;
         }
-        Log.d("Gaurav31", "getViewAt");
 
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.ingredient_widget_list_item);
         rv.setTextViewText(R.id.tv_widget_text, mRecipe.getRecipeName());
+        rv.setTextViewText(R.id.tv_ingredient, mRecipe.getIngredients().get(position).getIngredient());
+        rv.setTextViewText(R.id.tv_measure, mRecipe.getIngredients().get(position).getMeasure());
+        rv.setTextViewText(R.id.tv_quantity, mRecipe.getIngredients().get(position).getQuantity().toString());
 
-       /* Intent fillInIntent = new Intent();
+        /*Intent fillInIntent = new Intent();
         fillInIntent.putExtra(RecipeAppWidgetProvider.EXTRA_LABEL, list.get(0).getIngredient().toString());
         rv.setOnClickFillInIntent(R.id.widgetItemContainer, fillInIntent);*/
 
