@@ -1,13 +1,6 @@
 package gauravsngarg.com.bakingrecipes.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.ArrayList;
-
-/**
- * Created by gaurav.g4 on 08-09-2018.
- */
 
 public class RecipeList /*implements Parcelable*/{
 

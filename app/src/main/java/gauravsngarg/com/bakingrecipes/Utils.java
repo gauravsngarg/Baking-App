@@ -5,10 +5,6 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
-/**
- * Created by gaurav.g4 on 08-09-2018.
- */
-
 public class Utils {
 
     public static String JSON = null;

@@ -20,7 +20,6 @@ public class RecipeContentProvider extends ContentProvider {
     public static final int RECIPES = 100;
     public static final int RECIPE_WITH_ID = 101;
 
-    // Declare a static variable for the Uri matcher that you construct
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final String TAG = RecipeContentProvider.class.getName();
 
