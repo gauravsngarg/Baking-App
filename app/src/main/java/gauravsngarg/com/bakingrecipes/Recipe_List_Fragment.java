@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +44,7 @@ public class Recipe_List_Fragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     public static List<Recipe> list;
+    public static String JSON;
 
 
     public RecipeAdapter adapter;
@@ -141,6 +141,7 @@ public class Recipe_List_Fragment extends Fragment {
         @Override
         protected void onPostExecute(String json) {
             if (json != null) {
+                Utils.setJSON(json);
                 Gson gson;
                 list.clear();
                 GsonBuilder gsonBuilder = new GsonBuilder();
@@ -163,6 +164,17 @@ public class Recipe_List_Fragment extends Fragment {
 
             }
             Utils.saveObjectInPreference(getContext(), "Recipe", list);
+           // Recipe recip = Utils.getFromPreference(getActivity(),"Recipe");
+
+           /* Recipe recip;
+            Gson gson = new Gson();
+            String json1 = Utils.getFromPreference(getActivity(), "Recipe");
+
+            Log.d("Gaurav31", json1 +"");*/
+           // recip = gson.fromJson(json1, Recipe.class);
+
+          //  Log.d("Gaurav31", "Name: " + recip.getRecipeName()+ " Measure: " + recip.getIngredients().get(0).getMeasure());
+
 
            // Log.d("Gaurav31", list.get(3).getRecipeName() + " Listfrag");
             pb_indicator.setVisibility(View.INVISIBLE);

@@ -10,6 +10,17 @@ import com.google.gson.Gson;
  */
 
 public class Utils {
+
+    public static String JSON = null;
+
+    public static String getJSON() {
+        return JSON;
+    }
+
+    public static void setJSON(String JSON) {
+        Utils.JSON = JSON;
+    }
+
     public static void saveObjectInPreference(Context context, String key, Object value){
         SharedPreferences preferences = context.getSharedPreferences("pbSave", Context.MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = preferences.edit();

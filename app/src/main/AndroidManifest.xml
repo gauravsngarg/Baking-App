@@ -29,9 +29,10 @@
         <activity
             android:name=".activities.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:launchMode="singleTop"
+
             android:parentActivityName=".activities.ItemListActivity"
             android:theme="@style/AppTheme"/>
+        <!--android:launchMode="singleTop"-->
 
         <service
             android:name=".widget.MyWidgetRemoteViewsService"
