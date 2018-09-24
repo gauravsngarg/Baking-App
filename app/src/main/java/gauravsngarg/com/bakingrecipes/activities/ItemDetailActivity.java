@@ -10,13 +10,9 @@ import gauravsngarg.com.bakingrecipes.ItemDetailFragment;
 import gauravsngarg.com.bakingrecipes.R;
 import gauravsngarg.com.bakingrecipes.Recipe_List_Fragment;
 
-/**
- * An activity representing a single Item detail screen. This
- * activity is only used on narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link ItemListActivity}.
- */
 public class ItemDetailActivity extends AppCompatActivity {
+
+
 
     private int index;
     private int step_index;

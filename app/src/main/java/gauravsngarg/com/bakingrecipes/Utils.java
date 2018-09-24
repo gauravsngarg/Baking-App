@@ -11,10 +11,6 @@ public class Utils {
 
     public static int  Recipe_Index = 0;
 
-    public static String getJSON() {
-        return JSON;
-    }
-
     public static void setJSON(String JSON) {
         Utils.JSON = JSON;
     }
