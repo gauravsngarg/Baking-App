@@ -200,9 +200,14 @@ public class ItemDetailFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        releasePlayer();
     }
 
 
