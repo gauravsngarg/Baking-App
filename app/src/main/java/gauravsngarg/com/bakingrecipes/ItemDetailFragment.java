@@ -92,13 +92,13 @@ public class ItemDetailFragment extends Fragment {
 
             ingredientsList.addAll(Recipe_List_Fragment.list.get(index).getIngredients());
             rv_ingredients = (RecyclerView) rootView.findViewById(R.id.ingredients_recycler_view);
-            if(ingredientsList != null){
+            if (ingredientsList != null) {
                 rv_ingredients.setHasFixedSize(true);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 rv_ingredients.setLayoutManager(linearLayoutManager);
                 RecipeIngredientsAdapter recipeIngredientsAdapter;
 
-                recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(),ingredientsList.size(), ingredientsList);
+                recipeIngredientsAdapter = new RecipeIngredientsAdapter(getActivity(), ingredientsList.size(), ingredientsList);
                 rv_ingredients.setAdapter(recipeIngredientsAdapter);
 
                 RecipeAppWidgetProvider.sendRefreshBroadcast(getActivity());
@@ -178,7 +178,7 @@ public class ItemDetailFragment extends Fragment {
                     getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.seekTo(bundle.getLong("player_pos"));
-            mExoPlayer.setPlayWhenReady(bundle.getBoolean("player_pos"));
+            mExoPlayer.setPlayWhenReady(bundle.getBoolean("player_state"));
         }
     }
 
@@ -200,9 +200,17 @@ public class ItemDetailFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23)
+            releasePlayer();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
-        releasePlayer();
+        if (Util.SDK_INT > 23)
+            releasePlayer();
     }
 
     @Override
